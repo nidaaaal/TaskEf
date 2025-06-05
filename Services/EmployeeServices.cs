@@ -31,7 +31,8 @@ namespace Task.Services
         public async Task<EmployeeDto?> Create(EmployeeDto employeeDto)
         {
             if (await _appDbContext.Employees.AnyAsync(x => x.EmployeeId == employeeDto.EmployeeId)) return null;
-            _mapper.Map<Employee>(employeeDto);
+            var data = _mapper.Map<Employee>(employeeDto);
+            await _appDbContext.Employees.AddAsync(data);
             await _appDbContext.SaveChangesAsync();
 
             return employeeDto; 
